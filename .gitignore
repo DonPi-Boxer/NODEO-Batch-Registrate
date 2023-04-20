@@ -1,0 +1,9 @@
+.venv/
+/2D/result/
+/2D/data
+2D/__pycache__/
+/3D/result/
+/3D/data/
+3D/__pycache__/
+ToDo.txt
+README_2D_old.md
