@@ -18,11 +18,10 @@ class GaussianKernel(torch.nn.Module):
         super(GaussianKernel, self).__init__()
         self.win = win
         self.nsig = nsig
-        kernel_x, kernel_y, kernel_z = self.gkern1D_xyz(self.win, self.nsig)
-        kernel = kernel_x * kernel_y * kernel_z
+        kernel_x, kernel_y = self.gkern1D_xyz(self.win, self.nsig)
+        kernel = kernel_x * kernel_y 
         self.register_buffer("kernel_x", kernel_x)
         self.register_buffer("kernel_y", kernel_y)
-        self.register_buffer("kernel_z", kernel_z)
         self.register_buffer("kernel", kernel)
 
     def gkern1D(self, kernlen=None, nsig=None):
@@ -86,10 +85,11 @@ class AveragingKernel(torch.nn.Module):
 
 
 class BrainNet(ODEF):
-    def __init__(self, img_sz, smoothing_kernel, smoothing_win, smoothing_pass, ds, bs):
+    def __init__(self, img_sz,smoothing, smoothing_kernel, smoothing_win, smoothing_pass, ds, bs):
         super(BrainNet, self).__init__()
         padding_mode = 'replicate'
         bias = True
+        self.smoothing = smoothing 
         self.ds = ds
         self.bs = bs
         self.img_sz = img_sz
@@ -139,12 +139,13 @@ class BrainNet(ODEF):
             #x = F.upsample(x, scale_factor=2, mode='bilinear')
         # Apply Gaussian/Averaging smoothing
         'to make fig.4, remove the application of smoothing, simply comment out'
-        for _ in range(self.smoothing_pass):
-            if self.smoothing_kernel == 'AK':
-                x = self.sk(x)
-            else:
-                x_x = self.sk(x[:, 0, :, :, :].unsqueeze(1))
-                x_y = self.sk(x[:, 1, :, :, :].unsqueeze(1))
-                x = torch.cat([x_x, x_y], 1)
+        if self.smoothing:
+            for _ in range(self.smoothing_pass):
+                if self.smoothing_kernel == 'AK':
+                    x = self.sk(x)
+                else:
+                    x_x = self.sk(x[:, 0, :, :].unsqueeze(1))
+                    x_y = self.sk(x[:, 1, :, :].unsqueeze(1))
+                    x = torch.cat([x_x, x_y], 1)
         return x
 

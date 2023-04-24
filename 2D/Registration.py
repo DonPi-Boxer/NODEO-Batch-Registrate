@@ -68,6 +68,7 @@ def registration(config, device, moving, fixed):
     'define the network by using the class "BrainNet" from the "network" script'
     'BrainNet with specific inputs img_sz etc. from "config"'
     Network = BrainNet(img_sz=im_shape,
+                       smoothing=config.smoothing,
                        smoothing_kernel=config.smoothing_kernel,
                        smoothing_win=config.smoothing_win,
                        smoothing_pass=config.smoothing_pass,

@@ -28,6 +28,7 @@ def create_config():
     parser.add_argument("--bs", type=int,
                         dest="bs", default=16,
                         help="bottleneck size.")
+    #Smoothing configuration       
     parser.add_argument("--smoothing", type=int,
                         dest="smoothing", default=True,
                         action=argparse.BooleanOptionalAction,

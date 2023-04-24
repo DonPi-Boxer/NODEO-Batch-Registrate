@@ -45,6 +45,7 @@ def registration(config, device, moving, fixed):
     fixed = fixed.unsqueeze(0).unsqueeze(0)
 
     Network = BrainNet(img_sz=im_shape,
+                       smoothing=config.smoothing,
                        smoothing_kernel=config.smoothing_kernel,
                        smoothing_win=config.smoothing_win,
                        smoothing_pass=config.smoothing_pass,

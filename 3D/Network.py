@@ -88,10 +88,11 @@ class AveragingKernel(torch.nn.Module):
 
 
 class BrainNet(ODEF):
-    def __init__(self, img_sz, smoothing_kernel, smoothing_win, smoothing_pass, ds, bs):
+    def __init__(self, img_sz, smoothing, smoothing_kernel, smoothing_win, smoothing_pass, ds, bs):
         super(BrainNet, self).__init__()
         padding_mode = 'replicate'
         bias = True
+        self.smoothing = smoothing
         self.ds = ds
         self.bs = bs
         self.img_sz = img_sz
@@ -139,13 +140,14 @@ class BrainNet(ODEF):
         for _ in range(self.ds):
             x = F.upsample(x, scale_factor=2, mode='trilinear')
         # Apply Gaussian/Averaging smoothing
-        for _ in range(self.smoothing_pass):
-            if self.smoothing_kernel == 'AK':
-                x = self.sk(x)
-            else:
-                x_x = self.sk(x[:, 0, :, :, :].unsqueeze(1))
-                x_y = self.sk(x[:, 1, :, :, :].unsqueeze(1))
-                x_z = self.sk(x[:, 2, :, :, :].unsqueeze(1))
-                x = torch.cat([x_x, x_y, x_z], 1)
+        if self.smoothing:
+            for _ in range(self.smoothing_pass):
+                if self.smoothing_kernel == 'AK':
+                    x = self.sk(x)
+                else:
+                    x_x = self.sk(x[:, 0, :, :, :].unsqueeze(1))
+                    x_y = self.sk(x[:, 1, :, :, :].unsqueeze(1))
+                    x_z = self.sk(x[:, 2, :, :, :].unsqueeze(1))
+                    x = torch.cat([x_x, x_y, x_z], 1)
         return x
 
