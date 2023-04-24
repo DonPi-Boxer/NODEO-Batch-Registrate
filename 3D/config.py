@@ -10,7 +10,7 @@ def create_config():
                         help="Suffix of filenames of the data images (without filetype name)")
     parser.add_argument("--suffix_segs", type=str,
                         dest="suffix_segs", default="seg",
-                        help="Suffix of filenames of the data segmentation (without filetype name)")    
+                        help="Suffix of filenames of the data segmentation (without filetype name)")
     parser.add_argument("--statistics", type=int,
                         dest="statistics", default=True,
                         action=argparse.BooleanOptionalAction,
@@ -28,7 +28,6 @@ def create_config():
     parser.add_argument("--bs", type=int,
                         dest="bs", default=16,
                         help="bottleneck size.")
-    #Smoothing configuration
     parser.add_argument("--smoothing", type=int,
                         dest="smoothing", default=True,
                         action=argparse.BooleanOptionalAction,
