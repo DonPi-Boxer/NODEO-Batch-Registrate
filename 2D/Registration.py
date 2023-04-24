@@ -1,5 +1,3 @@
-import argparse
-import os
 import time
 import Loss
 from Network import BrainNet
@@ -7,15 +5,13 @@ from Loss import *
 from NeuralODE import *
 from Utils import *
 import Save
-import matplotlib.pyplot as plt
-
 'changes made for 2D'
 'to make the results of fig.4, we added them to the main function'
 
 '"main" defines what to do with config'
 'input is config, this is the configuration specification defined at bottom of this script'
 
-def main(config, moving_mri, fixed_mri, savedir, fixed_seg_in, moving_seg_in, save_visuals):
+def main(config, moving_mri, fixed_mri, savedir, fixed_seg_in, moving_seg_in):
     device = torch.device(config.device)  ## config.device: now set to 'CPU'
     #CHANGED BY NJ
     fixed = load_nii(fixed_mri)        ## load the fixed image(s)
@@ -27,29 +23,26 @@ def main(config, moving_mri, fixed_mri, savedir, fixed_seg_in, moving_seg_in, sa
     runtime = time.time() - t
     print('Registration Running Time:', runtime)
     print('---Registration DONE---')
-    av_dice, mean_neg_j, ratio_neg_j = evaluation(config, device, df, df_with_grid, fixed_seg_in, moving_seg_in)
-    if save_visuals:
+    av_dice, mean_neg_j, ratio_neg_j = evaluation(config,device, df, df_with_grid, fixed_seg_in, moving_seg_in)
+    if config.visuals:
         Save.save_image(moving,savedir, 'Moving Image')
         Save.save_image(fixed, savedir, 'Fixed Image')
         Save.save_df(savedir, df)
         # Plot warped as a 2D image
         warped_moving_np = warped_moving.detach().cpu().numpy()
         Save.save_image(warped_moving_np, savedir,'Warped Moving Image')
-
         df_with_grid_np = df_with_grid.cpu().numpy()
         # Plot the 2D deformation field
-        
-        #Save deformation field with grid
+        # Save deformation field with grid
         Save.save_grid(df_with_grid_np[0, :, :, 0], df_with_grid_np[0, :, :, 1], savedir,'df with grid')
         # Plot the jacobian determinants of the deformation field
         jdet = Loss.JacboianDet(df_with_grid)
         Save.save_image(jdet.cpu().numpy()[0, :, :],savedir, "Jacobian Determinant")
         # Only keep negative jacobian determinants - do with pytorch
         jdet_neg_elements = jdet.clamp(max=0).square()
-        Save.save_image(jdet_neg_elements.cpu().numpy()[0, :, :],savedir, "Negative Jacobian Determinant")
-        #If statement ends here then
+        Save.save_image(jdet_neg_elements.cpu().numpy()[0, :, :],savedir, "Negative Jacobian Determinant")   
     print('---Evaluation DONE---')
-    Save.save_result(warped_moving,savedir) # df_with_grid)
+    Save.save_result(warped_moving,savedir)
     print('---Results Saved---')
     return av_dice, runtime, mean_neg_j, ratio_neg_j
 
@@ -66,7 +59,6 @@ def registration(config, device, moving, fixed):
     :return all_phi: Displacement field for all time steps.
     '''
     im_shape = fixed.shape
-
     moving = torch.from_numpy(moving).to(device).float()
     fixed = torch.from_numpy(fixed).to(device).float()
     # make batch dimension
@@ -133,7 +125,7 @@ def registration(config, device, moving, fixed):
     return best_df, best_df_with_grid, best_warped_moving
 
 'utensil for "main"'
-def evaluation(config, device, df, df_with_grid, fixed_seg_in, moving_seg_in):
+def evaluation(config,device, df, df_with_grid, fixed_seg_in, moving_seg_in):
     ### Calculate Neg Jac Ratio
     neg_Jet = -1.0 * JacboianDet(df_with_grid)
     neg_Jet = F.relu(neg_Jet)
@@ -144,7 +136,7 @@ def evaluation(config, device, df, df_with_grid, fixed_seg_in, moving_seg_in):
     print('Total of neg Jet: ', mean_neg_J)
     print('Ratio of neg Jet: ', ratio_neg_J)
     ### Calculate Dice
-    label = [2, 3, 4, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+    label = config.label
     fixed_seg = load_nii(fixed_seg_in)
     moving_seg = load_nii(moving_seg_in)
     ST_seg = SpatialTransformer(fixed_seg.shape, mode='nearest').to(device)

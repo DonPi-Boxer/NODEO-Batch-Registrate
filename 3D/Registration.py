@@ -1,10 +1,9 @@
-import argparse
-import os
 import time
 from Network import BrainNet
 from Loss import *
 from NeuralODE import *
 from Utils import *
+import Save
 
 def main(config, moving_mri, fixed_mri, savedir, fixed_seg_in, moving_seg_in):
     device = torch.device(config.device)
@@ -19,8 +18,11 @@ def main(config, moving_mri, fixed_mri, savedir, fixed_seg_in, moving_seg_in):
     print('Registration Running Time:', runtime)
     print('---Registration DONE---')
     av_dice, mean_neg_j, ratio_neg_j  = evaluation(config, device, df, df_with_grid, fixed_seg_in, moving_seg_in)
-    print('---Evaluation DONE---')
-    save_result(config, savedir, warped_moving,df)
+    print('---Evaluation DONE---')    
+    #If we want visuals, save the deformation field
+    if config.visuals:
+        Save.save_df(savedir, df)         
+    Save.save_result(savedir, warped_moving)
     print('---Results Saved---')
     return av_dice, runtime, mean_neg_j, ratio_neg_j 
 
@@ -105,12 +107,7 @@ def evaluation(config, device, df, df_with_grid, fixed_seg_in, moving_seg_in):
     print('Total of neg Jet: ', mean_neg_J)
     print('Ratio of neg Jet: ', ratio_neg_J)
     ### Calculate Dice
-    
-    #labels of the original paper, try to run with these
-    label = [2, 3, 4, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 24, 28, 41, 42, 43, 46, 47, 49, 50, 51, 52, 53, 54, 60]
-    #Labels for out dataset, think somethings is wrong with these
-    #label = [1, 2, 3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 20, 21, 22, 24, 25, 26, 27, 28, 29, 30, 31]
-    ##CHANGED BY NJ
+    label = config.label
     fixed_seg = load_nii(fixed_seg_in)
     ##CHANGED BY NJ
     moving_seg = load_nii(moving_seg_in)
@@ -124,10 +121,3 @@ def evaluation(config, device, df, df_with_grid, fixed_seg_in, moving_seg_in):
     print('Avg. dice on %d structures: ' % len(label), av_dice)
     return av_dice, mean_neg_J, ratio_neg_J
 
-#Changed to remove df
-def save_result(config,savedir,warped_moving, df):
-    ##CHANGED BY NJ
-    if config.save_visuals:
-        save_nii(df.permute(2,3,4,0,1).detach().cpu().numpy(), '%s/df.nii.gz' % (savedir))
-    ##CHANGED BY NJ
-    save_nii(warped_moving.detach().cpu().numpy(), '%s/warped.nii.gz' % (savedir))
