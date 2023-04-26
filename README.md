@@ -23,7 +23,6 @@ cd NODEO-DL-PROJECT/
 * Install the requirements. 
 ```
 pip install -r requirements.txt
-]
 ```
 ## Running the script
 Usage for 2D and 3D batch-registration are almost identical. They should be performed within the 2D or 3D directory respectively.
@@ -68,7 +67,7 @@ Running the file from a command-line allows for the adaptation of following para
  ```
  python3 batch-registrate.py --help
 ```
- *The following arguments can be given 
+ * The following arguments can be given 
 
   ```                      [-h] [--savedir SAVEDIR]
                            [--suffix_imgs SUFFIX_IMGS]
@@ -87,70 +86,63 @@ Running the file from a command-line allows for the adaptation of following para
                            [--device DEVICE]
 ```
 
-The meaning of these arguments and their default values are as follows:
+* The meaning of these arguments and their default values are as follows:
 ```
-  -h, --help            show help message
-  --savedir SAVEDIR     Directory to save registration results to
-                        (Default: result)
+  -h, --help                             Show help message
+  --savedir SAVEDIR                      Directory to save registration results to
+                                         (Default: result)
   --suffix_imgs SUFFIX_IMGS
-                        Suffix of filenames of the data images (without
-                        filetype name)
-                        (Default: 'norm')
+                                         Suffix of filenames of the data images (without filetype name)
+                                         (Default: 'norm')
   --suffix_segs SUFFIX_SEGS
-                        Suffix of filenames of the data segmentation (without
-                        filetype name)  
-                        (Default: 'seg')
+                                         Suffix of filenames of the data segmentation (without filetype name)  
+                                         (Default: 'seg')
   --statistics, --no-statistics
-                        Save registration statistics 
-                        (Default: True)
-  --visuals, --no-visuals
-                        Save additional visuals 
-                        (Default: True)
-  --label LABEL         Segmentation labels to use during registration
-                        evaluation
-                        (Default: [2, 3, 4, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18])
-  --ds DS               specify output downsample times.
-                        (Default: 2)
-  --bs BS               bottleneck size.
-                        (Default: 16)
-  --smoothing, --no-smoothing
-                        Perform smoothing 
-                        (Default: True)
-  --smoothing_kernel SMOOTHING_KERNEL
-                        AK: Averaging kernel; GK: Gaussian Kernel   Note: GK now only works in 3D
-                        (Default: AK)
+                                         Save registration statistics 
+                                         (Default: True)
+  --visuals, --no-visuals                Save additional visuals 
+                                         (Default: True)
+  --label LABEL                          Segmentation labels to use during registration evaluation
+                                         (Default: [2, 3, 4, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18])
+  --ds DS                                Specify output downsample times. 
+                                         (Default: 2)
+  --bs BS                                Bottleneck size. 
+                                         (Default: 16)
+                            
+  --smoothing, --no-smoothing            Perform smoothing 
+                                         (Default: True)
+                            
+  --smoothing_kernel SMOOTHING_KERNEL    AK: Averaging kernel; GK: Gaussian Kernel  
+                                         Note: GK now only works in 3D
+                                         (Default: AK) 
   --smoothing_win SMOOTHING_WIN
-                        Smoothing Kernel size
-  --smoothing_pass SMOOTHING_PASS
-                        Number of Smoothing pass
-                        (Default: 15)
-  --time_steps TIME_STEPS
-                        Number of time steps between the two images, >=2.
-                        (Default: 1)
-  --optimizer OPTIMIZER
-                        Specify the optimizer to use. Euler or RK.
-                        (Default: Euler)
-  --STEP_SIZE STEP_SIZE
-                        step size for numerical integration.
-                        (Default: 0.001)
-  --epoches EPOCHES     No. of epochs to train.
-                        (Default: 300)
-  --NCC_win NCC_WIN     NCC window size
-                        (Default: 21)
-  --lr LR               Learning rate.
-                        (Default: 0.005)
-  --lambda_J LAMBDA_J   Loss weight for neg J
-                        (Default: 2.5)
-  --lambda_df LAMBDA_DF
-                        Loss weight for dphi/dx
-                        (Default: 0.05)
-  --lambda_v LAMBDA_V   Loss weight for neg J
-                        (Default: 0.00005)
-  --loss_sim LOSS_SIM   Similarity measurement to use   
-                        (Default: NCC)
-  --debug DEBUG         Open debug mode
-  --device device       Device to run the registration on. GPU or CPU
-                        (Default: GPU)
+                                         Smoothing Kernel size. 
+                                         (Default: 15)
+  --smoothing_pass SMOOTHING_PASS        Number of Smoothing pass 
+                                         (Default: 1)
+  --time_steps TIME_STEPS                Number of time steps between the two images, >=2. 
+                                         (Default: 2)
+  --optimizer OPTIMIZER                  Specify the optimizer to use. Euler or RK. 
+                                         (Default: Euler)
+  --STEP_SIZE STEP_SIZE                  Step size for numerical integration.
+                                         (Default: 0.001)
+  --epoches EPOCHES                      No. of epochs to train. 
+                                         (Default: 300)
+  --NCC_win NCC_WIN                      NCC window size 
+                                         (Default: 21)
+  --lr LR                                Learning rate. 
+                                         (Default: 0.005)
+  --lambda_J LAMBDA_J                    Loss weight for neg J 
+                                         (Default: 2.5)
+  --lambda_df LAMBDA_DF                  Loss weight for dphi/dx 
+                                         (Default: 0.05)
+  --lambda_v LAMBDA_V                    Loss weight for neg J 
+                                         (Default: 0.00005)
+  --loss_sim LOSS_SIM                    Similarity measurement to use 
+                                         (Default: NCC)
+  --debug DEBUG                          Open debug mode
+  --device device                        Device to run the registration on. GPU or CPU 
+                                         (Default: GPU)
   ```
 
 # Citation
