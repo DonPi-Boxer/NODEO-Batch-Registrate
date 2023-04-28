@@ -23,7 +23,7 @@ def main(config, moving_mri, fixed_mri, savedir, fixed_seg_in, moving_seg_in):
     runtime = time.time() - t
     print('Registration Running Time:', runtime)
     print('---Registration DONE---')
-    av_dice, mean_neg_j, ratio_neg_j = evaluation(config,device, df, df_with_grid, fixed_seg_in, moving_seg_in)
+    av_dice, mean_neg_j, ratio_neg_j, neg_Jdet = evaluation(config,device, df, df_with_grid, fixed_seg_in, moving_seg_in)
     if config.visuals:
         Save.save_image(moving,savedir, 'Moving Image')
         Save.save_image(fixed, savedir, 'Fixed Image')
@@ -38,9 +38,8 @@ def main(config, moving_mri, fixed_mri, savedir, fixed_seg_in, moving_seg_in):
         # Plot the jacobian determinants of the deformation field
         jdet = Loss.JacboianDet(df_with_grid)
         Save.save_image(jdet.cpu().numpy()[0, :, :],savedir, "Jacobian Determinant")
-        # Only keep negative jacobian determinants - do with pytorch
-        jdet_neg_elements = jdet.clamp(max=0).square()
-        Save.save_image(jdet_neg_elements.cpu().numpy()[0, :, :],savedir, "Negative Jacobian Determinant")   
+        # Plot negative jacobian determinant
+        Save.save_image(neg_Jdet.cpu().numpy()[0, :, :],savedir, "Negative Jacobian Determinant")   
     print('---Evaluation DONE---')
     Save.save_result(warped_moving,savedir)
     print('---Results Saved---')
@@ -128,7 +127,7 @@ def registration(config, device, moving, fixed):
 'utensil for "main"'
 def evaluation(config,device, df, df_with_grid, fixed_seg_in, moving_seg_in):
     ### Calculate Neg Jac Ratio
-    neg_Jet = -1.0 * JacboianDet(df_with_grid)
+    neg_Jet = -1.0 *  JacboianDet(df_with_grid)
     neg_Jet = F.relu(neg_Jet)
     mean_neg_J = torch.sum(neg_Jet).detach().cpu().numpy()
     num_neg = len(torch.where(neg_Jet > 0)[0])
@@ -148,7 +147,7 @@ def evaluation(config,device, df, df_with_grid, fixed_seg_in, moving_seg_in):
     dice_move2fix = dice(warped_seg.unsqueeze(0).unsqueeze(0).detach().cpu().numpy(), fixed_seg, label)
     av_dice = np.mean(dice_move2fix[0])
     print('Avg. dice on %d structures: ' % len(label), av_dice)
-    return av_dice, mean_neg_J, ratio_neg_J
+    return av_dice, mean_neg_J, ratio_neg_J, neg_Jet
    
 
 

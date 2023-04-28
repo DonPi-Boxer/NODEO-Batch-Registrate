@@ -8,9 +8,6 @@ from torch import nn
 
 from NeuralODE import ODEF
 
-## to do: change to 2d, for fig. 4
-
-## We don't use this GK, only AK (better for workload)
 ## This is ensured by default = AK in 'Registration' file
 
 class GaussianKernel(torch.nn.Module):
@@ -117,13 +114,11 @@ class BrainNet(ODEF):
         else:
             self.sk = GaussianKernel(win=smoothing_win, nsig=0.1)
 
-    ## changed to 2d, by removing z and 3-->2 and tri--> bilinear
     def forward(self, x):
 
         imgx = self.img_sz[0]
         imgy = self.img_sz[1]
         # x = self.relu(self.enc_conv1(x))
-        ##x = F.interpolate(x, scale_factor=0.5, mode='bilinear')  # Optional to downsample the image
         x = self.relu(self.enc_conv2(x))
         x = self.relu(self.enc_conv3(x))
         x = self.relu(self.enc_conv4(x))
@@ -132,13 +127,10 @@ class BrainNet(ODEF):
         x = x.view(-1)        
         x = self.relu(self.lin1(x))
         x = self.lin2(x)
-        ## use debugging tool (?)
         x = x.view(1, 2, int(math.ceil(imgx / pow(2, self.ds))), int(math.ceil(imgy / pow(2, self.ds))))
         for _ in range(self.ds):
             x = F.interpolate(x, scale_factor=2, mode='bilinear', align_corners=False)
-            #x = F.upsample(x, scale_factor=2, mode='bilinear')
         # Apply Gaussian/Averaging smoothing
-        'to make fig.4, remove the application of smoothing, simply comment out'
         if self.smoothing:
             for _ in range(self.smoothing_pass):
                 if self.smoothing_kernel == 'AK':
