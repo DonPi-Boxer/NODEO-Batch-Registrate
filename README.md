@@ -1,13 +1,15 @@
 # Introduction
-This repository is a project done for the course Deep-Learning on the Technical University of Delft. This repository is complementery to our reproducibility blogpost about the paper 
+This repository is a project done for the course Deep-Learning at the Technical University of Delft. This repository is complementary to our reproducibility blogpost about the paper 
 [CVPR 2022] NODEO: A Neural Ordinary Differential Equation Based Optimization Framework for Deformable Image Registration'.
 
-Our reproducibility blogpost can be found here (TODO: put link to blogpost.....).
-The original repostiroy of the original paper can be found here (TODO: link to NODEO-DIR repository).
+We have made the explicit choice to keep this repository dedicated to the code and complementary Readme. Our reproducibility blogpost can be found here:
+https://hackmd.io/46ErqRCcRcWV8j1W3PrkPQ#11-Image-registration
+The original repository of the original paper can be found here:
+https://github.com/yifannnwu/NODEO-DIR
 
-This repository is a fork of the original respository, and focuses itself on two things.
+This repository is a fork of the original repository, and focuses itself on two things.
 First of all, this repository allows the user to perform the image registration over 2D images as well as over 3D images (while the original repository only supports 3D image registration).
-Secondly, this paper allows for the execution of multiple registrations in batch. That is, if one wants to perform registration over multiple sets of images, one can simply run the script once, get a coffee and when he comes back all the desired registrations will be performed. This was also not possible in the original repository, which only allowed for the registration of two images within one run. 
+Secondly, this paper allows for the execution of multiple registrations in a batch. That is, if one wants to perform registration over multiple sets of images, one can simply run the script once, get a coffee and when he comes back all the desired registrations will be performed. This was also not possible in the original repository, which only allowed for the registration of two images within one run. 
 
 # Usage
 ## Initialization 
@@ -36,23 +38,23 @@ OR
 cd 2D/
 ```
 Put the moving images and segmentations in the data/fixed directory.
-Put the fixed images and segementations in the data/moving directory.
-Default suffix for the images is 'norm', default suffix for the segmentation data is 'seg'.
-Note that these suffices *do not* include the filetypes. 
-So, by default, the filesnames of images end with 'norm.nii.gz' and the the filenames of the segmentations end with 'seg.nii.gz'.
+Put the fixed images and segmentations in the data/moving directory.
+Default suffix for the images is 'norm', the default suffix for the segmentation data is 'seg'.
+Note that these suffixes *do not* include the file types. 
+So, by default, the filesnames of images end with 'norm.nii.gz' and the filenames of the segmentations end with 'seg.nii.gz'.
 Furthermore note that this script only supports image registration of 'nii.gz' files.
 
 * Run the 'batch-registrate.py' file. 
-  This can be done either from an IDE of choise, or from the CMD.
+  This can be done either from an IDE of choice, or from the CMD.
 
 ```
 python3 batch-registrate.py 
 ```
-Please note that, due to the addition of ArgParse arguments using the Boolean operator, the 'batch-registrate.py' file requires python3.9+ to be able to run succesfully.
+Please note that, due to the addition of ArgParse arguments using the Boolean operator, the 'batch-registrate.py' file requires python3.9+ to be able to run successfully.
 
 ##Displayed results
 By default, registration results will be saved in the result/ directory. 
-The result directory will be filled with directory of the form 'MOVING_IMAGE_NAME'/'FIXED_IMAGE_NAME'.
+The result directory will be filled with a directory of the form 'MOVING_IMAGE_NAME'/'FIXED_IMAGE_NAME'.
 So, if e.g. one moving image is called moving and one fixed image is called fixed, the result of their registration will be saved in the directory
 ```
 result/moving/fixed
@@ -149,8 +151,9 @@ Running the file from a command-line allows for the adaptation of following para
 @inproceedings{wu2022nodeo,
   title={Nodeo: A neural ordinary differential equation based optimization framework for deformable image registration},
   author={Wu, Yifan and Jiahao, Tom Z and Wang, Jiancong and Yushkevich, Paul A and Hsieh, M Ani and Gee, James C},
-  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  book title={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
   pages={20804--20813},
   year={2022}
 }
+
 
