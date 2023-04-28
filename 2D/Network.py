@@ -101,10 +101,10 @@ class BrainNet(ODEF):
         self.bottleneck_sz = int(
             math.ceil(img_sz[0] / pow(2, self.ds)) * math.ceil(img_sz[1] / pow(2, self.ds)))  # 'was: img_sz[2] and extra element'
         
-        ' 864 might need to be (manually, hard-coded) changed. Also possible to calculate this in a smart way'
-        ' Not usual to define so explicitly'
-        ' we changed it to 960'
-        self.lin1 = nn.Linear(960, self.bs, bias=bias)
+        #Decleration of self.lin is changed w.r.t. the original repository. In the original repository,
+        #the size of the linear layer was hardcode to be 864, meaning the code could only be executed for
+        #Image with one size. By changing this, we have enabled the code to be executed over images of other sizes as well.
+        self.lin1 = nn.Linear(int(img_sz[0]* img_sz[1] / 32), self.bs, bias=bias)
         self.lin2 = nn.Linear(self.bs, self.bottleneck_sz * 2, bias=bias) # 2 for 2d
         self.relu = nn.ReLU()
 

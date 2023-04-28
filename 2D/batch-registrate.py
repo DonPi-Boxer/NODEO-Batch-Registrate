@@ -1,7 +1,5 @@
 import os
-import sys
 import Registration
-import numpy as np
 import config
 import Save
 
@@ -40,7 +38,7 @@ def main(config):
         for fixed_set_name,fixed_mri,fixed_seg in zip(fixed_set_name_arr,fixed_files_paths_mri,fixed_file_paths_seg):
             if moving_mri != fixed_mri:
                 numruns = numruns +1
-                savedir_run = config.savedir + "/" + moving_set_name +'/' + fixed_set_name
+                savedir_run = config.savedir + "/" + moving_set_name + '/' + fixed_set_name
                 if not os.path.isdir(savedir_run):
                     os.makedirs(savedir_run)
                 if config.visuals:
@@ -61,4 +59,7 @@ def main(config):
         
 if __name__ == '__main__':
     config = config.create_config()
+    #If results folder does not yet exist, create one
+    if not os.path.isdir(config.savedir):
+            os.makedirs(config.savedir)
     main(config)

@@ -1,7 +1,5 @@
 import os
-import sys
 import Registration
-import numpy as np
 import config
 import Save
 def main(config):
@@ -56,4 +54,8 @@ def main(config):
         
 if __name__ == '__main__':
     config = config.create_config()
+    #If results folder does not yet exist, create one
+    if not os.path.isdir(config.savedir):
+            os.makedirs(config.savedir)
+    #Run the batch registration
     main(config)

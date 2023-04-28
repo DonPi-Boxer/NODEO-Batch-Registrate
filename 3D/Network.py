@@ -110,9 +110,8 @@ class BrainNet(ODEF):
         
         
        #Possibly try to find out how to calculate the needed value her automatically
-        #self.lin1 = nn.Linear(864, self.bs, bias=bias)
-        self.lin1 = nn.Linear(1152, self.bs, bias=bias)
-        
+        #self.lin1 = nn.Linear(864, self.bs, bias=bias) 
+        self.lin1 = nn.Linear(int(int(img_sz[0]/64) * int(img_sz[1]/64) *int(img_sz[2]/64) * 64), self.bs, bias=bias)      
         self.lin2 = nn.Linear(self.bs, self.bottleneck_sz * 3, bias=bias)
         self.relu = nn.ReLU()
         # Create smoothing kernels
