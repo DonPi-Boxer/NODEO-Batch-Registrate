@@ -3,8 +3,11 @@ This repository is a project done for the course Deep-Learning at the Technical 
 [CVPR 2022] NODEO: A Neural Ordinary Differential Equation Based Optimization Framework for Deformable Image Registration'.
 
 We have made the explicit choice to keep this repository dedicated to the code and complementary Readme. Our reproducibility blogpost can be found here:
+
 https://hackmd.io/46ErqRCcRcWV8j1W3PrkPQ#11-Image-registration
-The original repository of the original paper can be found here:
+
+The repository of the original paper can be found here:
+
 https://github.com/yifannnwu/NODEO-DIR
 
 This repository is a fork of the original repository, and focuses itself on two things.
