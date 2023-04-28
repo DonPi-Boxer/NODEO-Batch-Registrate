@@ -3,3 +3,4 @@ nibabel
 numpy
 scipy
 matplotlib
+cuda
