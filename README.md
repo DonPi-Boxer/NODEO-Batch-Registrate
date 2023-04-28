@@ -154,10 +154,3 @@ Running the file from a command-line allows for the adaptation of following para
   year={2022}
 }
 
-```js
-const optionDefinitions = [
-  { name: 'verbose', alias: 'v', type: Boolean },
-  { name: 'src', type: String, multiple: true, defaultOption: true },
-  { name: 'timeout', alias: 't', type: Number }
-]
-```
